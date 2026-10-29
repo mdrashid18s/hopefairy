@@ -1,0 +1,14 @@
+{
+  "name": "hope",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build-hope.mjs",
+    "dev": "npm --prefix frontend run dev",
+    "package": "powershell -ExecutionPolicy Bypass -File package_distribution_zips.ps1"
+  },
+  "dependencies": {
+    "docx": "^9.11.0"
+  }
+}

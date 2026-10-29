@@ -1,0 +1,32 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /hope/
+
+  # If requested path already points directly inside out/, allow it
+  RewriteCond %{REQUEST_URI} ^/hope/out/
+  RewriteRule ^ - [L]
+
+  # If file or folder exists inside out/, rewrite directly to it
+  RewriteCond %{DOCUMENT_ROOT}/hope/out/$1 -f [OR]
+  RewriteCond %{DOCUMENT_ROOT}/hope/out/$1 -d
+  RewriteRule ^(.*)$ out/$1 [L]
+
+  # Admin portal local build mapping
+  RewriteCond %{DOCUMENT_ROOT}/hope/backend/dist/backend/$1 -f [OR]
+  RewriteCond %{DOCUMENT_ROOT}/hope/backend/dist/backend/$1 -d
+  RewriteRule ^backend/(.*)$ backend/dist/backend/$1 [L]
+  RewriteCond %{DOCUMENT_ROOT}/hope/backend/dist/backend/$1/index.html -f
+  RewriteRule ^backend/(.*)$ backend/dist/backend/$1/index.html [L]
+  RewriteRule ^backend/?$ backend/dist/backend/index.html [L]
+
+  # Clean URL routing: if out/$1.html exists
+  RewriteCond %{DOCUMENT_ROOT}/hope/out/$1.html -f
+  RewriteRule ^(.*)$ out/$1.html [L]
+
+  # Clean URL routing: if out/$1/index.html exists
+  RewriteCond %{DOCUMENT_ROOT}/hope/out/$1/index.html -f
+  RewriteRule ^(.*)$ out/$1/index.html [L]
+
+  # Root request
+  RewriteRule ^$ out/index.html [L]
+</IfModule>
