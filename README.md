@@ -1,160 +1,146 @@
-# @alloc/quick-lru [![Build Status](https://travis-ci.org/aleclarson/quick-lru.svg?branch=master)](https://travis-ci.org/aleclarson/quick-lru) [![Coverage Status](https://coveralls.io/repos/github/aleclarson/quick-lru/badge.svg?branch=master)](https://coveralls.io/github/aleclarson/quick-lru?branch=master)
-
-> Simple [“Least Recently Used” (LRU) cache](https://en.m.wikipedia.org/wiki/Cache_replacement_policies#Least_Recently_Used_.28LRU.29)
-
-This is a CommonJS-only fork of [`quick-lru`](https://github.com/sindresorhus/quick-lru).
-
-Useful when you need to cache something and limit memory usage.
-
-See the [algorithm section](#algorithm) for implementation details.
-
-## Install
-
-```
-$ npm install @alloc/quick-lru
-```
-
-## Usage
-
-```js
-const QuickLRU = require('@alloc/quick-lru');
-
-const lru = new QuickLRU({maxSize: 1000});
-
-lru.set('🦄', '🌈');
-
-lru.has('🦄');
-//=> true
-
-lru.get('🦄');
-//=> '🌈'
-```
-
-## API
-
-### new QuickLRU(options?)
-
-Returns a new instance.
-
-### options
-
-Type: `object`
-
-#### maxSize
-
-*Required*\
-Type: `number`
-
-The target maximum number of items before evicting the least recently used items.
-
-> **Note:** The dual-cache algorithm may physically retain up to twice `maxSize` entries for performance reasons, even though the reported cache size does not exceed `maxSize`.
-
-#### maxAge
-
-Type: `number`\
-Default: `Infinity`
-
-The maximum number of milliseconds an item should remain in cache.
-By default maxAge will be Infinity, which means that items will never expire.
-
-Lazy expiration happens upon the next `write` or `read` call.
-
-Individual expiration of an item can be specified by the `set(key, value, options)` method.
-
-#### onEviction
-
-*Optional*\
-Type: `(key, value) => void`
-
-Called right before an item is evicted from the cache due to capacity pressure or TTL expiration.
-
-Useful for side effects or for items like object URLs that need explicit cleanup (`revokeObjectURL`).
-
-This callback is not called for manual removals via `delete()` or `clear()`.
-
-### Instance
-
-The instance is [`iterable`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Iteration_protocols) so you can use it directly in a [`for…of`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Statements/for...of) loop.
-
-Both `key` and `value` can be of any type.
-
-#### .set(key, value, options?)
-
-Set an item. Returns the instance.
-
-Individual expiration of an item can be specified with the `maxAge` option. If not specified, the global `maxAge` value will be used in case it is specified on the constructor, otherwise the item will never expire.
-
-#### .get(key)
-
-Get an item.
-
-#### .has(key)
-
-Check if an item exists.
-
-#### .peek(key)
-
-Get an item without marking it as recently used.
-
-#### .expiresIn(key)
-
-Get the remaining time to live (in milliseconds) for the given item, or `undefined` if the item is not in the cache.
-
-- Does not mark the item as recently used.
-- Does not trigger lazy expiration or remove the entry when it is expired.
-- Returns `Infinity` if the item has no expiration.
-- May return a negative number if the item has already expired but has not yet been lazily removed.
-
-#### .delete(key)
-
-Delete an item.
-
-Returns `true` if the item is removed or `false` if the item doesn't exist.
-
-#### .clear()
-
-Delete all items.
-
-#### .resize(maxSize)
-
-Update the `maxSize`, discarding items as necessary. Insertion order is mostly preserved, though this is not a strong guarantee.
-
-Useful for on-the-fly tuning of cache sizes in live systems.
-
-#### .keys()
-
-Iterable for all the keys.
-
-#### .values()
-
-Iterable for all the values.
-
-#### .entriesAscending()
-
-Iterable for all entries, starting with the oldest (ascending in recency).
-
-#### .entriesDescending()
-
-Iterable for all entries, starting with the newest (descending in recency).
-
-#### .size
-
-The stored item count.
-
-## Algorithm
-
-This library implements a variant of the [`hashlru` algorithm](https://github.com/dominictarr/hashlru#algorithm) using two [`Map`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Map) objects. One map holds recently added or accessed entries, while the other holds older entries. When the recent map reaches `maxSize`, it replaces the older map and a new recent map is created.
-
-This avoids the frequent delete operations required by a traditional linked-list LRU and supports keys of any type and `undefined` values. The tradeoff is that the two maps may physically retain up to twice the target `maxSize` between rotations. Use a strict-size cache when that temporary memory overhead is unacceptable.
+# HopeFairy — Enterprise Study Abroad & Higher Education Admissions Platform
+
+<div align="center">
+  <img src="frontend/public/brand/hopefairy-logo-full.png" alt="HopeFairy Emblem" width="380" />
+  <p><strong>Premier Global Education Advisory, Overseas Study Destinations, Indian Admissions & Standardized Test Prep</strong></p>
+  <p>
+    <a href="https://github.com/mdrashid18s/hopefairy"><img src="https://img.shields.io/badge/Next.js-16%20App%20Router-black?style=flat-square&logo=next.js" alt="Next.js 16" /></a>
+    <a href="https://github.com/mdrashid18s/hopefairy"><img src="https://img.shields.io/badge/React-19-blue?style=flat-square&logo=react" alt="React 19" /></a>
+    <a href="https://github.com/mdrashid18s/hopefairy"><img src="https://img.shields.io/badge/Laravel-12%20REST%20API-red?style=flat-square&logo=laravel" alt="Laravel 12" /></a>
+    <a href="https://github.com/mdrashid18s/hopefairy"><img src="https://img.shields.io/badge/PHP-8.4-777bb4?style=flat-square&logo=php" alt="PHP 8.4" /></a>
+    <a href="https://github.com/mdrashid18s/hopefairy"><img src="https://img.shields.io/badge/MySQL-3NF%20Relational-00758f?style=flat-square&logo=mysql" alt="MySQL 3NF" /></a>
+    <a href="https://github.com/mdrashid18s/hopefairy"><img src="https://img.shields.io/badge/Auth-Laravel%20Sanctum-green?style=flat-square" alt="Sanctum" /></a>
+  </p>
+</div>
 
 ---
 
-<div align="center">
-	<b>
-		<a href="https://tidelift.com/subscription/pkg/npm-quick-lru?utm_source=npm-quick-lru&utm_medium=referral&utm_campaign=readme">Get professional support for this package with a Tidelift subscription</a>
-	</b>
-	<br>
-	<sub>
-		Tidelift helps make open source sustainable for maintainers while giving companies<br>assurances about security, maintenance, and licensing for their dependencies.
-	</sub>
-</div>
+## 🏛️ Executive Architecture
+
+HopeFairy is engineered using an executive **3-container decoupled enterprise structure** ensuring complete separation of concerns, high throughput, and independent scalability:
+
+```
+hopefairy/
+├── apis/                      # PHP / Laravel 12 RESTful API Engine (Port 8000)
+│   ├── app/
+│   │   ├── Http/
+│   │   │   ├── Controllers/   # Thin controllers handling validation & JSON envelopes
+│   │   │   └── Requests/      # Strictly typed request validation classes
+│   │   ├── Models/            # Eloquent ORM Models with 3NF relationships & accessors
+│   │   ├── Services/          # Dedicated OOP Domain Services (Zero business logic in UI)
+│   │   └── Mail/              # Unified Dynamic Email System & OTP verification
+│   ├── database/
+│   │   ├── migrations/        # Normalized 3NF migrations & composite performance indexes
+│   │   └── seeders/           # Master seed data (Countries, Courses, Users)
+│   └── routes/api.php         # Versioned RESTful API endpoints (/api/v1/*)
+│
+├── backend/                   # Admin Portal (Executive Luxury Dashboard Suite)
+│   ├── src/
+│   │   ├── app/(admin)/       # Routes: /admin (Overview), /admin/login, /admin/inquiries,
+│   │   │                      # /admin/destinations, /admin/courses, /admin/services, /admin/users
+│   │   ├── components/        # Dual-theme design tokens, Miller column drilldown, SVG flags
+│   │   └── services/          # Decoupled API clients connecting to apis/
+│   └── package.json           # hopefairy-admin
+│
+└── frontend/                  # Public Website (Next.js 16 App Router & React 19)
+    ├── src/
+    │   ├── app/               # Routes: /, /about-us, /services, /destinations, /gulf-desk,
+    │   │                      # /india-admissions, /test-prep, /contact-us, /sitemap
+    │   ├── components/        # HopeFairy Compass, 3D tilt cards, destinations ticker
+    │   └── services/          # Client-side domain services delegating API calls
+    └── package.json           # hopefairy-frontend
+```
+
+---
+
+## ✨ Key Features & Technical Highlights
+
+### 1. Public Flagship Experience (`frontend/`)
+- **HopeFairy Compass**: Flagship 4-pillar career assessment and counselling engine with instant consultation trigger.
+- **Study Abroad Destinations**: Comprehensive coverage across UK, USA, Canada, Germany, Australia, Ireland, and Singapore with live degree level and tuition filters.
+- **Indian College Admissions Desk**: Dedicated advisory portal for B.Tech, MBBS, MBA, and Law admissions with entrance exam guides (NEET, JEE, CAT, CLAT).
+- **Interactive 3D UI & Micro-interactions**: Magnetic buttons, 3D tilt perspective cards, animated destination ticker marquee, and particle sparkles.
+- **Enterprise SEO Optimization**: Fully dynamic XML sitemap generator (`sitemap.js`), `robots.js`, structured JSON-LD schemas, and rich OpenGraph social share previews.
+
+### 2. Executive Luxury Admin Suite (`backend/`)
+- **Dual-Theme Token Engine**:
+  - *Light Mode*: Pristine White & Golden canvas (`#ffffff` surfaces, `#0f172a` typography, `#d8b056` gold accents).
+  - *Dark Mode*: Deep Obsidian & Golden canvas (`#080809` background, `#100f0e` surface cards, `#faf7f0` typography).
+  - *Zero Table Flickering*: Rows never jump or shift color on hover.
+- **Curriculum Miller Drilldown**: 3-step Miller column explorer for navigating deep curriculum hierarchies (Subjects $\rightarrow$ Topics $\rightarrow$ Subtopics).
+- **CRM Leads & Inquiries Manager**: Live consultation tracking, follow-ups, and status updates with optimistic UI mutation.
+- **Sanctum Authentication & OTP System**: Token-based security with Gmail SMTP email delivery for OTP password recovery.
+
+### 3. Backend RESTful API & 3NF Database (`apis/` & `database/`)
+- **Strict 3NF Relational Normalization**:
+  - Zero static JSON arrays for repeating child entities.
+  - Relational foreign keys with `ON DELETE CASCADE` (`country_courses`, `courses`, `subjects`, `topics`, `subtopics`, `resources`).
+  - Elimination of transitive foreign keys (pure hierarchical 3NF architecture).
+- **Unified Dynamic HTML Email System**: A single responsive Master HTML email template accepting dynamic parameters (`status`, theme colors, key-value summaries, and CTAs).
+- **Consistent Response Contract**: All endpoints return a standardized JSON envelope (`success`, `statusCode`, `message`, `data`, `errors`).
+
+---
+
+## 🛠️ Tech Stack & Prerequisites
+
+| Layer | Technologies |
+|---|---|
+| **Frontend Portal** | Next.js 16 (App Router), React 19, Tailwind CSS, Framer Motion |
+| **Admin Portal** | Next.js 16, React 19, Custom Luxury Design Tokens, SVG Icons |
+| **Backend REST API** | Laravel 12, PHP 8.3 / 8.4, Laravel Sanctum, Spatie Permission |
+| **Database** | MySQL 8.0+ / MariaDB 10.3+ (Strict 3NF, utf8mb4) |
+| **Email Delivery** | Gmail SMTP / PHPMailer with Dynamic Blade Layouts |
+
+---
+
+## 🚀 Quick Start & Development Setup
+
+### 1. Database Setup
+```bash
+# In MySQL console or phpMyAdmin:
+mysql -u root -p -e "CREATE DATABASE IF NOT EXISTS hopefairy CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+mysql -u root -p hopefairy < database/hopefairy_master_schema_and_seed.sql
+```
+
+### 2. Backend API Setup (`apis/`)
+```bash
+cd apis
+cp .env.example .env
+# Configure DB_DATABASE=hopefairy, DB_USERNAME, DB_PASSWORD in .env
+php artisan key:generate
+php artisan migrate
+php artisan serve --port=8000
+```
+
+### 3. Admin Portal (`backend/`)
+```bash
+cd backend
+cp .env.example .env.local
+npm install
+npm run dev -- --port 3002
+# Accessible at: http://localhost:3002/admin/login
+```
+
+### 4. Public Website (`frontend/`)
+```bash
+cd frontend
+cp .env.example .env.local
+npm install
+npm run dev
+# Accessible at: http://localhost:3000
+```
+
+---
+
+## 🔒 Security & Sensitive Data Policy
+
+- All production credentials, SMTP passwords, database passwords, and API keys are strictly excluded via `.gitignore`.
+- Template `.env.example` files are provided across all containers with sanitized placeholders.
+
+---
+
+## 👨‍💻 Maintainer & Author
+
+- **Lead Engineer**: **MD Rashid** ([@mdrashid18s](https://github.com/mdrashid18s))
+- **Repository**: [https://github.com/mdrashid18s/hopefairy](https://github.com/mdrashid18s/hopefairy)
+- **Active Branch**: `md-rashid`
