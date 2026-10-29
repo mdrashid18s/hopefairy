@@ -1,0 +1,12 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Deny access to sensitive files like .env, .git, config files
+    <FilesMatch "(^\.|\.env|\.git|\.yml|\.yaml|\.sql|\.json|\.lock)$">
+        Require all denied
+    </FilesMatch>
+
+    # Forward all web requests to public folder
+    RewriteRule ^$ public/ [L]
+    RewriteRule (.*) public/$1 [L]
+</IfModule>
