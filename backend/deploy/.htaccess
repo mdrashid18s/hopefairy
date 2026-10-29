@@ -1,0 +1,49 @@
+# HopeFairy Admin Portal (backend.zip -> public_html/backend/)
+# This folder has its own rewrite rules: mod_rewrite does not inherit the website's rules here.
+
+DirectoryIndex index.html
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Next.js route-prefetch files: requested as __next.a.b.__PAGE__.txt, exported as __next.a/b/__PAGE__.txt
+  RewriteRule ^(.*/)?__next\.([^./]+)\.__PAGE__\.txt$ $1__next.$2/__PAGE__.txt [L]
+  RewriteRule ^(.*/)?__next\.([^./]+)\.([^./]+)\.__PAGE__\.txt$ $1__next.$2/$3/__PAGE__.txt [L]
+  RewriteRule ^(.*/)?__next\.([^./]+)\.([^./]+)\.([^./]+)\.__PAGE__\.txt$ $1__next.$2/$3/$4/__PAGE__.txt [L]
+
+  # Existing files and folders (pages are folder/index.html)
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Clean URLs without a trailing slash: /backend/login -> login/index.html
+  RewriteCond %{REQUEST_FILENAME}/index.html -f
+  RewriteRule ^(.*)$ $1/index.html [L]
+
+  # Anything else under /backend: back to the dashboard (it redirects to login when signed out)
+  RewriteRule ^ index.html [L]
+</IfModule>
+
+<IfModule mod_headers.c>
+  # Keep the admin portal out of search engines
+  Header set X-Robots-Tag "noindex, nofollow"
+
+  # Never cache admin HTML, so a new deploy shows immediately
+  <FilesMatch "\.(html|htm)$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate, max-age=0"
+  </FilesMatch>
+
+  # Fingerprinted JS / CSS / fonts / images
+  <FilesMatch "\.(js|css|woff2|png|jpg|jpeg|gif|ico|svg|webp)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+</IfModule>
+
+<IfModule mod_mime.c>
+  AddType text/css .css
+  AddType application/javascript .js .mjs
+  AddType image/svg+xml .svg
+  AddType font/woff2 .woff2
+  AddType image/webp .webp
+</IfModule>

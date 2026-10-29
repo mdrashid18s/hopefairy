@@ -1,0 +1,545 @@
+/* ==========================================================================
+   HopeFairy Admin Portal Dual-Theme System
+   Light Mode: White & Golden | Dark Mode: Black & Golden
+   Soft Luxury Hairlines & Ambient Shadows
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. CSS VARIABLES FOR LIGHT MODE (WHITE & GOLDEN)
+   -------------------------------------------------------------------------- */
+.admin-root,
+.admin-root.admin-light {
+  /* Canvas & Surfaces */
+  --admin-bg: #ffffff;
+  --admin-surface: #ffffff;
+  --admin-surface-elevated: #ffffff;
+  --admin-surface-hover: #ffffff;        /* Zero background shift on table rows */
+  --admin-surface-active: #ffffff;
+
+  /* Soft Hairlines & Delicate Borders (No dark harsh outlines) */
+  --admin-border: rgba(226, 232, 240, 0.65);       /* Ultra-soft light hairline border */
+  --admin-border-subtle: #f8fafc;                  /* Ultra-soft hairline divider */
+  --admin-border-gold: rgba(216, 176, 86, 0.28);
+  --admin-border-gold-hover: rgba(216, 176, 86, 0.6);
+
+  /* HopeFairy Luxury Gold Palette */
+  --admin-gold-300: #e4c775;
+  --admin-gold-400: #d8b056;                       /* Primary Brand Gold */
+  --admin-gold-500: #c89b3c;                       /* Deep Accent Gold */
+
+  /* Crisp Typography */
+  --admin-text-primary: #0f172a;                   /* High-contrast dark slate */
+  --admin-text-secondary: #334155;                 /* Slate body copy */
+  --admin-text-muted: #64748b;                     /* Slate captions */
+  --admin-text-faint: #94a3b8;                     /* Light slate placeholders */
+
+  /* Table Specific Tokens */
+  --admin-table-bg: #ffffff;
+  --admin-table-header-bg: #ffffff;
+  --admin-table-header-text: #475569;
+  --admin-table-row-bg: #ffffff;
+  --admin-table-row-hover: #ffffff;                /* Disables hover background change */
+  --admin-table-border: rgba(226, 232, 240, 0.65);
+  --admin-table-divider: rgba(241, 245, 249, 0.8);
+
+  /* Form Inputs */
+  --admin-input-bg: #ffffff;
+  --admin-input-border: #cbd5e1;
+  --admin-input-text: #0f172a;
+
+  /* Ambient Soft Shadows (Elegant floating card feel) */
+  --admin-shadow-card: 0 10px 30px -4px rgba(15, 23, 42, 0.07), 0 4px 12px -2px rgba(15, 23, 42, 0.03);
+  --admin-shadow-gold: 0 4px 20px -2px rgba(200, 155, 60, 0.22);
+  --admin-shadow-glow: 0 0 0 1px rgba(216, 176, 86, 0.25), 0 10px 25px -5px rgba(200, 155, 60, 0.25);
+  --admin-logo-shadow: 0 0 0 1px rgba(216, 176, 86, 0.3), 0 4px 14px -4px rgba(200, 155, 60, 0.35);
+}
+
+/* --------------------------------------------------------------------------
+   2. CSS VARIABLES FOR DARK MODE (BLACK & GOLDEN)
+   -------------------------------------------------------------------------- */
+.admin-root.admin-dark {
+  /* Canvas & Surfaces */
+  --admin-bg: #080809;                   /* Deep obsidian black */
+  --admin-surface: #100f0e;              /* Surface cards & table containers */
+  --admin-surface-elevated: #161514;     /* Elevated dropdowns & modals */
+  --admin-surface-hover: #100f0e;        /* Clean uniform row hover, no color flashing */
+  --admin-surface-active: #1a1816;
+
+  /* Hairlines & Borders */
+  --admin-border: #24221e;               /* Hairline container border */
+  --admin-border-subtle: #1c1a17;        /* Soft inner dividers */
+  --admin-border-gold: rgba(216, 176, 86, 0.3); /* Signature gold border */
+  --admin-border-gold-hover: rgba(216, 176, 86, 0.65); /* Highlighted gold border */
+
+  /* HopeFairy Luxury Gold Palette */
+  --admin-gold-300: #e4c775;             /* Gold Highlight */
+  --admin-gold-400: #d8b056;             /* Primary Brand Gold */
+  --admin-gold-500: #c89b3c;             /* Deep Accent Gold */
+
+  /* Crisp Typography */
+  --admin-text-primary: #faf7f0;         /* Crisp ivory headings & labels */
+  --admin-text-secondary: #e5e0d4;       /* Body copy */
+  --admin-text-muted: #9e988b;           /* Captions, subtext & secondary */
+  --admin-text-faint: #746f65;           /* Timestamps & placeholders */
+
+  /* Table Specific Tokens */
+  --admin-table-bg: #100f0e;
+  --admin-table-header-bg: #0b0b0c;
+  --admin-table-header-text: #d8b056;
+  --admin-table-row-bg: #100f0e;
+  --admin-table-row-hover: #100f0e;      /* Disables hover background change */
+  --admin-table-border: #24221e;
+  --admin-table-divider: #1c1a17;
+
+  /* Form Inputs */
+  --admin-input-bg: #0a0a0b;
+  --admin-input-border: #24221e;
+  --admin-input-text: #faf7f0;
+
+  /* Shadows */
+  --admin-shadow-card: 0 12px 36px -8px rgba(0, 0, 0, 0.8), 0 0 1px 1px rgba(216, 176, 86, 0.12);
+  --admin-shadow-gold: 0 0 25px -4px rgba(200, 155, 60, 0.35);
+  --admin-shadow-glow: 0 0 0 1px rgba(216, 176, 86, 0.35), 0 16px 40px -12px rgba(200, 155, 60, 0.45);
+  --admin-logo-shadow: 0 0 0 1px rgba(216, 176, 86, 0.35), 0 6px 20px -6px rgba(200, 155, 60, 0.55);
+}
+
+/* --------------------------------------------------------------------------
+   3. BASE RESETS & THEME ENFORCEMENT
+   -------------------------------------------------------------------------- */
+.admin-root {
+  background-color: var(--admin-bg) !important;
+  color: var(--admin-text-primary) !important;
+  transition: background-color 0.25s ease, color 0.25s ease !important;
+}
+
+.admin-root h1,
+.admin-root h2,
+.admin-root h3,
+.admin-root h4,
+.admin-root h5,
+.admin-root h6 {
+  color: var(--admin-text-primary);
+}
+
+.admin-logo {
+  border-radius: 9999px !important;
+  box-shadow: var(--admin-logo-shadow) !important;
+  border: none !important;
+}
+
+/* --------------------------------------------------------------------------
+   4. LIGHT MODE ENFORCEMENT (.admin-light) — ULTRA-LIGHT BORDERS & AMBIENT SHADOW
+   -------------------------------------------------------------------------- */
+.admin-root.admin-light .bg-slate-950,
+.admin-root.admin-light .bg-slate-950\/90,
+.admin-root.admin-light .bg-slate-950\/50,
+.admin-root.admin-light .bg-slate-950\/40,
+.admin-root.admin-light .bg-slate-900,
+.admin-root.admin-light .bg-slate-900\/90,
+.admin-root.admin-light .bg-slate-900\/80,
+.admin-root.admin-light .bg-slate-900\/70,
+.admin-root.admin-light .bg-slate-900\/60,
+.admin-root.admin-light .bg-slate-900\/50,
+.admin-root.admin-light .bg-slate-800,
+.admin-root.admin-light .bg-slate-800\/90,
+.admin-root.admin-light .bg-slate-800\/80,
+.admin-root.admin-light .bg-slate-800\/60,
+.admin-root.admin-light .bg-slate-800\/50,
+.admin-root.admin-light .bg-slate-800\/40 {
+  background-color: #ffffff !important;
+  border-color: rgba(226, 232, 240, 0.65) !important;
+}
+
+/* Light, delicate borders in Light Mode */
+.admin-root.admin-light .border-slate-800,
+.admin-root.admin-light .border-slate-800\/80,
+.admin-root.admin-light .border-slate-800\/60,
+.admin-root.admin-light .border-slate-700,
+.admin-root.admin-light .border-slate-700\/80,
+.admin-root.admin-light .border-slate-700\/50,
+.admin-root.admin-light .border-slate-200,
+.admin-root.admin-light .border-slate-300,
+.admin-root.admin-light .border-slate-100 {
+  border-color: rgba(226, 232, 240, 0.65) !important;
+}
+
+.admin-root.admin-light .divide-slate-200 > :not([hidden]) ~ :not([hidden]),
+.admin-root.admin-light .divide-slate-100 > :not([hidden]) ~ :not([hidden]),
+.admin-root.admin-light .divide-slate-800\/60 > :not([hidden]) ~ :not([hidden]) {
+  border-color: rgba(241, 245, 249, 0.8) !important;
+}
+
+/* Soft, elegant ambient shadow on cards, tab switchers, and tables */
+.admin-root.admin-light .admin-stat-card,
+.admin-root.admin-light .bg-white.rounded-2xl,
+.admin-root.admin-light .rounded-2xl.border,
+.admin-root.admin-light .rounded-xl.border,
+.admin-root.admin-light .admin-welcome-banner,
+.admin-root.admin-light .shadow-xs,
+.admin-root.admin-light .shadow-sm {
+  border-color: rgba(226, 232, 240, 0.65) !important;
+  box-shadow: 0 4px 14px -3px rgba(15, 23, 42, 0.04), 0 2px 6px -2px rgba(15, 23, 42, 0.02) !important;
+}
+
+/* Dedicated Tab Switcher Soft Border & Ambient Elevation */
+.admin-root.admin-light div[class*="rounded-2xl"][class*="p-1.5"] {
+  border-color: rgba(226, 232, 240, 0.65) !important;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.03) !important;
+}
+
+.admin-root.admin-light .admin-stat-card:hover {
+  border-color: var(--admin-gold-400) !important;
+  box-shadow: 0 12px 30px -4px rgba(200, 155, 60, 0.2), 0 4px 10px rgba(0, 0, 0, 0.04) !important;
+  transform: translateY(-2px) !important;
+  background-color: #ffffff !important;
+}
+
+.admin-root.admin-light header,
+.admin-root.admin-light aside,
+.admin-root.admin-light footer {
+  border-color: rgba(226, 232, 240, 0.65) !important;
+}
+
+.admin-root.admin-light header {
+  box-shadow: 0 1px 12px -2px rgba(15, 23, 42, 0.05) !important;
+}
+
+/* Typography in Light Mode - Guarantee high contrast & ZERO invisible white text */
+.admin-root.admin-light .text-white:not(.admin-btn-primary):not(.admin-btn-danger):not(.bg-rose-500):not(.bg-rose-600):not(.bg-emerald-500):not(.bg-emerald-600):not([class*="bg-amber"]):not([class*="bg-gradient"]):not([class*="bg-rose"]):not([class*="bg-emerald"]),
+.admin-root.admin-light .text-slate-100,
+.admin-root.admin-light .text-\[\#faf7f0\],
+.admin-root.admin-light [class*="text-[#faf7f0]"],
+.admin-root.admin-light [class*="dark:text-[#faf7f0]"],
+.admin-root.admin-light [class*="dark:text-white"] {
+  color: #0f172a !important;
+}
+.admin-root.admin-light .text-slate-200,
+.admin-root.admin-light [class*="dark:text-slate-200"],
+.admin-root.admin-light [class*="dark:text-slate-100"] {
+  color: #1e293b !important;
+}
+.admin-root.admin-light .text-slate-300,
+.admin-root.admin-light [class*="dark:text-slate-300"] {
+  color: #334155 !important;
+}
+.admin-root.admin-light .text-slate-400,
+.admin-root.admin-light [class*="dark:text-slate-400"] {
+  color: #64748b !important;
+}
+.admin-root.admin-light .text-slate-500,
+.admin-root.admin-light [class*="dark:text-slate-500"] {
+  color: #64748b !important;
+}
+
+/* Explicit table cell text in light mode */
+.admin-root.admin-light tbody td > div > span.font-bold,
+.admin-root.admin-light tbody td span.font-bold {
+  color: #0f172a !important;
+}
+
+/* --------------------------------------------------------------------------
+   5. DARK MODE ENFORCEMENT (.admin-dark)
+   -------------------------------------------------------------------------- */
+.admin-root.admin-dark .bg-slate-950,
+.admin-root.admin-dark .bg-slate-950\/90,
+.admin-root.admin-dark .bg-slate-950\/80,
+.admin-root.admin-dark .bg-slate-950\/60,
+.admin-root.admin-dark .bg-slate-950\/50,
+.admin-root.admin-dark .bg-slate-950\/40 {
+  background-color: #080809 !important;
+  border-color: #24221e !important;
+}
+
+.admin-root.admin-dark .bg-slate-900,
+.admin-root.admin-dark .bg-slate-900\/90,
+.admin-root.admin-dark .bg-slate-900\/80,
+.admin-root.admin-dark .bg-slate-900\/70,
+.admin-root.admin-dark .bg-slate-900\/60,
+.admin-root.admin-dark .bg-slate-900\/50 {
+  background-color: #100f0e !important;
+  border-color: #24221e !important;
+}
+
+.admin-root.admin-dark .bg-slate-800,
+.admin-root.admin-dark .bg-slate-800\/90,
+.admin-root.admin-dark .bg-slate-800\/80,
+.admin-root.admin-dark .bg-slate-800\/60,
+.admin-root.admin-dark .bg-slate-800\/50,
+.admin-root.admin-dark .bg-slate-800\/40 {
+  background-color: #161514 !important;
+  border-color: #24221e !important;
+}
+
+.admin-root.admin-dark .bg-white {
+  background-color: #100f0e !important;
+  border-color: #24221e !important;
+}
+
+.admin-root.admin-dark .border-slate-800,
+.admin-root.admin-dark .border-slate-800\/80,
+.admin-root.admin-dark .border-slate-800\/60,
+.admin-root.admin-dark .border-slate-200,
+.admin-root.admin-dark .border-slate-300 {
+  border-color: #24221e !important;
+}
+
+.admin-root.admin-dark .border-slate-700,
+.admin-root.admin-dark .border-slate-700\/80,
+.admin-root.admin-dark .border-slate-700\/50 {
+  border-color: rgba(216, 176, 86, 0.3) !important;
+}
+
+.admin-root.admin-dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]),
+.admin-root.admin-dark .divide-slate-100 {
+  border-color: #1c1a17 !important;
+}
+
+.admin-root.admin-dark .text-white,
+.admin-root.admin-dark .text-slate-100,
+.admin-root.admin-dark .text-slate-900,
+.admin-root.admin-dark .text-slate-800,
+.admin-root.admin-dark .text-slate-700 {
+  color: #faf7f0 !important;
+}
+.admin-root.admin-dark .text-slate-200 {
+  color: #f1ede3 !important;
+}
+.admin-root.admin-dark .text-slate-300,
+.admin-root.admin-dark .text-slate-600 {
+  color: #e5e0d4 !important;
+}
+.admin-root.admin-dark .text-slate-400,
+.admin-root.admin-dark .text-slate-500 {
+  color: #9e988b !important;
+}
+
+.admin-root.admin-dark .text-amber-600,
+.admin-root.admin-dark .text-amber-700 {
+  color: #d8b056 !important;
+}
+
+.admin-root.admin-dark .admin-stat-card {
+  background-color: #100f0e !important;
+  border: 1px solid #24221e !important;
+  box-shadow: 0 4px 14px -4px rgba(0, 0, 0, 0.6) !important;
+}
+.admin-root.admin-dark .admin-stat-card:hover {
+  border-color: var(--admin-gold-400) !important;
+  box-shadow: var(--admin-shadow-gold) !important;
+  transform: translateY(-2px) !important;
+  background-color: #100f0e !important;
+}
+
+/* Table & Surface Containers in Dark Mode: Clean subtle shadow, strictly zero light/slate glowing halos */
+.admin-root.admin-dark .bg-white.rounded-2xl,
+.admin-root.admin-dark .rounded-2xl.border,
+.admin-root.admin-dark .rounded-3xl.border,
+.admin-root.admin-dark div[class*="rounded-2xl"][class*="border"] {
+  box-shadow: 0 4px 16px -4px rgba(0, 0, 0, 0.45) !important;
+}
+
+.admin-root.admin-dark .shadow-slate-200\/40,
+.admin-root.admin-dark .shadow-slate-200\/50,
+.admin-root.admin-dark .shadow-slate-200,
+.admin-root.admin-dark .shadow-lg:not([class*="shadow-amber"]):not([class*="shadow-rose"]):not([class*="shadow-emerald"]) {
+  box-shadow: 0 4px 14px -3px rgba(0, 0, 0, 0.45) !important;
+}
+
+/* --------------------------------------------------------------------------
+   6. TABLE SYSTEM — DELICATE HAIRLINE BORDERS & ZERO HOVER FLICKERING
+   -------------------------------------------------------------------------- */
+.admin-root table {
+  background-color: var(--admin-table-bg) !important;
+  border-collapse: separate !important;
+}
+
+.admin-root thead {
+  background-color: var(--admin-table-header-bg) !important;
+  border-bottom: 1px solid var(--admin-table-border) !important;
+}
+
+.admin-root thead th {
+  background-color: var(--admin-table-header-bg) !important;
+  color: var(--admin-table-header-text) !important;
+  font-weight: 700 !important;
+  font-size: 11px !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  border-bottom: 1px solid var(--admin-table-border) !important;
+  padding-top: 14px !important;
+  padding-bottom: 14px !important;
+}
+
+.admin-root tbody {
+  background-color: var(--admin-table-row-bg) !important;
+}
+
+.admin-root tbody tr {
+  background-color: var(--admin-table-row-bg) !important;
+  border-bottom: 1px solid var(--admin-table-divider) !important;
+  transition: none !important;
+}
+
+.admin-root tbody td {
+  background-color: var(--admin-table-row-bg) !important;
+}
+
+/* MANDATORY RULE: No background color changes on hover for table rows */
+.admin-root tbody tr:hover,
+.admin-root tbody tr:hover td,
+.admin-root tbody tr:hover th {
+  background-color: var(--admin-table-row-hover) !important;
+  border-left: none !important;
+}
+
+/* --------------------------------------------------------------------------
+   7. INPUTS, SELECTS & FORM CONTROLS
+   -------------------------------------------------------------------------- */
+.admin-root input,
+.admin-root select,
+.admin-root textarea {
+  background-color: var(--admin-input-bg) !important;
+  border: 1px solid var(--admin-input-border) !important;
+  color: var(--admin-input-text) !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.admin-root input::placeholder,
+.admin-root textarea::placeholder {
+  color: var(--admin-text-faint) !important;
+}
+
+.admin-root input:focus,
+.admin-root select:focus,
+.admin-root textarea:focus {
+  border-color: var(--admin-gold-400) !important;
+  background-color: var(--admin-input-bg) !important;
+  box-shadow: 0 0 0 2px rgba(216, 176, 86, 0.25) !important;
+  outline: none !important;
+}
+
+/* Executive Modal Form Controls: High-definition crisp borders */
+.admin-root .admin-modal-input {
+  border: 1.5px solid #cbd5e1 !important;
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+  border-radius: 0.85rem !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.admin-root .admin-modal-input:focus {
+  border-color: #d8b056 !important;
+  background-color: #ffffff !important;
+  box-shadow: 0 0 0 3px rgba(216, 176, 86, 0.25) !important;
+  outline: none !important;
+}
+
+.admin-root.admin-dark .admin-modal-input {
+  border: 1.5px solid #2f2c27 !important;
+  background-color: #141311 !important;
+  color: #faf7f0 !important;
+}
+
+.admin-root.admin-dark .admin-modal-input:focus {
+  border-color: #d8b056 !important;
+  background-color: #181715 !important;
+  box-shadow: 0 0 0 3px rgba(216, 176, 86, 0.28) !important;
+}
+
+/* --------------------------------------------------------------------------
+   8. PRIMARY LUXURY GOLD BUTTONS & SHARED ACCENTS
+   -------------------------------------------------------------------------- */
+.admin-root .btn-gold-primary,
+.admin-root .bg-amber-400 {
+  background-color: #d8b056 !important;
+  background-image: linear-gradient(135deg, var(--admin-gold-300) 0%, var(--admin-gold-400) 50%, var(--admin-gold-500) 100%) !important;
+  color: #060606 !important;
+  font-weight: 700 !important;
+}
+
+.admin-root .btn-gold-primary:hover,
+.admin-root .bg-amber-400:hover,
+.admin-root .hover\:bg-amber-300:hover {
+  background-image: linear-gradient(135deg, var(--admin-gold-200) 0%, var(--admin-gold-300) 50%, var(--admin-gold-400) 100%) !important;
+  box-shadow: var(--admin-shadow-glow) !important;
+}
+
+/* Modals Backdrops */
+.admin-root .bg-slate-950\/80,
+.admin-root .bg-black\/60,
+.admin-root .bg-black\/70,
+.admin-root .bg-black\/80,
+.admin-root.admin-light .bg-slate-950\/80,
+.admin-root.admin-light .bg-black\/60,
+.admin-root.admin-light .bg-black\/70,
+.admin-root.admin-light .bg-black\/80 {
+  background-color: rgba(6, 6, 8, 0.72) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+}
+
+/* ==========================================================================
+   ADMIN LOGIN PAGE ISOLATION (Fixed Dark Luxury Aesthetics)
+   Prevents .admin-light from turning text dark-blueish and inputs white.
+   ========================================================================== */
+.admin-login-page,
+.admin-root .admin-login-page,
+.admin-root.admin-light .admin-login-page {
+  background-color: #060606 !important;
+  color: #ffffff !important;
+}
+
+.admin-login-page .text-white,
+.admin-root.admin-light .admin-login-page .text-white,
+.admin-login-page h1,
+.admin-root.admin-light .admin-login-page h1,
+.admin-login-page h2,
+.admin-root.admin-light .admin-login-page h2,
+.admin-login-page [data-white],
+.admin-root.admin-light .admin-login-page [data-white] {
+  color: #ffffff !important;
+}
+
+/* Ensure Logo wordmark Hope stays stark white on the login page */
+.admin-login-page header .text-white,
+.admin-root.admin-light .admin-login-page header .text-white,
+.admin-login-page header span,
+.admin-root.admin-light .admin-login-page header span.text-white {
+  color: #ffffff !important;
+}
+
+/* Dark Theme Inputs & Fix Browser Autofill Turning Inputs White */
+.admin-login-page input,
+.admin-root.admin-light .admin-login-page input {
+  background-color: #141311 !important;
+  border-color: rgba(216, 176, 86, 0.35) !important;
+  color: #ffffff !important;
+}
+
+.admin-login-page input::placeholder,
+.admin-root.admin-light .admin-login-page input::placeholder {
+  color: rgba(255, 255, 255, 0.45) !important;
+}
+
+.admin-login-page input:focus,
+.admin-root.admin-light .admin-login-page input:focus {
+  background-color: #1a1816 !important;
+  border-color: #d8b056 !important;
+  box-shadow: 0 0 0 2px rgba(216, 176, 86, 0.3) !important;
+}
+
+/* Chrome / Safari / Edge Autofill Fix: Keep inputs dark even when browser autofills credentials */
+.admin-login-page input:-webkit-autofill,
+.admin-login-page input:-webkit-autofill:hover,
+.admin-login-page input:-webkit-autofill:focus,
+.admin-login-page input:-webkit-autofill:active,
+.admin-root.admin-light .admin-login-page input:-webkit-autofill,
+.admin-root.admin-light .admin-login-page input:-webkit-autofill:hover,
+.admin-root.admin-light .admin-login-page input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #ffffff !important;
+  -webkit-box-shadow: 0 0 0px 1000px #141311 inset !important;
+  box-shadow: 0 0 0px 1000px #141311 inset !important;
+  transition: background-color 5000s ease-in-out 0s !important;
+  caret-color: #ffffff !important;
+}
+
