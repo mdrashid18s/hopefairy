@@ -1,0 +1,98 @@
+# HopeFairy Production Apache Configuration
+
+# Ensure directory index looks for index.html
+DirectoryIndex index.html index.php
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # 1. Enforce HTTPS & Canonical Domain (non-www)
+  # Prevents http:// or www. requests from generating multi-hop redirect chains in Google Search Console
+  RewriteCond %{HTTPS} off [OR]
+  RewriteCond %{HTTP_HOST} ^www\. [NC]
+  RewriteCond %{HTTP_HOST} ^(?:www\.)?(.+)$ [NC]
+  RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+
+  # 2. Canonical 301 Permanent Redirects for Legacy / Alternate URLs
+  # Directs aliases straight to canonical target with trailing slash
+  RewriteRule ^contact/?$ /contact-us/ [R=301,L]
+  RewriteRule ^study-abroad/?$ /services/ [R=301,L]
+  RewriteRule ^admin/?$ /backend/ [R=301,L]
+  RewriteRule ^admin/(.*)$ /backend/$1 [R=301,L]
+
+  # 3. Canonical Trailing Slash for Physical Directories / Exported Routes
+  # When a visitor or bot visits /about-us without a trailing slash,
+  # redirect directly with 301 to /about-us/ to prevent Apache mod_dir from
+  # triggering an insecure HTTP or multi-hop redirect chain.
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteCond %{REQUEST_URI} !/$
+  RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1/ [R=301,L]
+
+  # 4. Next.js route-prefetch files: requested as __next.a.b.__PAGE__.txt, exported as __next.a/b/__PAGE__.txt
+  RewriteRule ^(.*/)?__next\.([^./]+)\.__PAGE__\.txt$ $1__next.$2/__PAGE__.txt [L]
+  RewriteRule ^(.*/)?__next\.([^./]+)\.([^./]+)\.__PAGE__\.txt$ $1__next.$2/$3/__PAGE__.txt [L]
+  RewriteRule ^(.*/)?__next\.([^./]+)\.([^./]+)\.([^./]+)\.__PAGE__\.txt$ $1__next.$2/$3/$4/__PAGE__.txt [L]
+
+  # 5. Pass through existing files
+  RewriteCond %{REQUEST_FILENAME} -f
+  RewriteRule ^ - [L]
+
+  # 6. Pass through existing directories ending with /
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteCond %{REQUEST_URI} /$
+  RewriteRule ^ - [L]
+
+  # 7. Pass through API requests
+  RewriteRule ^api/ - [L]
+
+  # 8. Clean URLs: folder with index.html
+  RewriteCond %{REQUEST_FILENAME}/index.html -f
+  RewriteRule ^(.*)$ $1/index.html [L]
+
+  # 9. Clean URLs: file.html
+  RewriteCond %{REQUEST_FILENAME}.html -f
+  RewriteRule ^(.*)$ $1.html [L]
+
+  # 10. Explicit /404 route
+  RewriteRule ^404/?$ 404.html [L]
+
+  # 11. All unknown routes: send a real 404 status (the ErrorDocument below shows the custom page).
+  # Serving 404.html with 200 made missing files like /ai-catalog.json return HTML ("soft 404").
+  RewriteRule ^ - [R=404,L]
+</IfModule>
+
+ErrorDocument 404 /404.html
+
+# Cache static assets
+<IfModule mod_headers.c>
+  # Never cache HTML files (so visitors always get the latest layout immediately)
+  <FilesMatch "\.(html|htm)$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate, max-age=0"
+    Header set Pragma "no-cache"
+    Header set Expires "0"
+  </FilesMatch>
+
+  # Cache static assets (JS, CSS, fonts, images) with fingerprint hashes
+  <FilesMatch "\.(js|css|woff2|png|jpg|jpeg|gif|ico|svg|webp)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+</IfModule>
+
+# Ensure correct MIME types on Apache / cPanel
+<IfModule mod_mime.c>
+  AddType text/css .css
+  AddType application/javascript .js .mjs
+  AddType image/svg+xml .svg .svgz
+  AddType font/woff2 .woff2
+  AddType font/woff .woff
+  AddType image/webp .webp
+  AddType image/png .png
+  AddType image/jpeg .jpg .jpeg
+  AddType text/plain .txt
+  AddCharset utf-8 .txt
+  AddType application/xml .xml
+  AddCharset utf-8 .xml
+</IfModule>
+
+

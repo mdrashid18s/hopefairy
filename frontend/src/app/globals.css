@@ -1,0 +1,519 @@
+@import "tailwindcss";
+
+/* Tailwind v4 opts into class-based dark mode (matches our ThemeContext,
+   which toggles .dark on <html>) instead of the prefers-color-scheme
+   default. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ------------------------------------------------------------------ *
+ * Theme tokens — black & gold, taken from the HopeFairy logo.
+ * Values are raw R G B channels so `rgb(var(--x) / a)` supports
+ * opacity. Light (warm ivory) is the default; `.dark` switches to the
+ * black variant. Registered in @theme below so Tailwind generates
+ * bg-page / text-fg / border-hair / etc. utilities that resolve these
+ * variables (and pick up the .dark override) at runtime.
+ * ------------------------------------------------------------------ */
+:root {
+  --page: 250 248 243;
+  --surface: 255 255 255;
+  --elevated: 244 240 231;
+  --fg: 17 15 12;
+  --fg-body: 45 41 34;
+  --fg-muted: 116 109 98;
+  --fg-faint: 150 143 131;
+  --hair: 17 15 12;
+  --tint: 17 15 12;
+
+  --shadow-card: 0 12px 28px -6px rgba(15, 23, 42, 0.07), 0 4px 10px -2px rgba(15, 23, 42, 0.03);
+  color-scheme: light;
+}
+
+.dark {
+  --page: 8 8 9;
+  --surface: 16 15 14;
+  --elevated: 22 20 18;
+  --fg: 250 247 240;
+  --fg-body: 229 224 212;
+  --fg-muted: 158 152 139;
+  --fg-faint: 116 111 101;
+  --hair: 255 248 230;
+  --tint: 255 248 230;
+
+  --shadow-card: 0 16px 36px -8px rgba(0, 0, 0, 0.7), 0 4px 12px -2px rgba(0, 0, 0, 0.45);
+  color-scheme: dark;
+}
+
+@theme {
+  --color-page: rgb(var(--page));
+  --color-surface: rgb(var(--surface));
+  --color-elevated: rgb(var(--elevated));
+  --color-fg: rgb(var(--fg));
+  --color-fg-body: rgb(var(--fg-body));
+  --color-fg-muted: rgb(var(--fg-muted));
+  --color-fg-faint: rgb(var(--fg-faint));
+  --color-hair: rgb(var(--hair));
+  --color-tint: rgb(var(--tint));
+
+  /* Fixed blacks — for surfaces that stay black in both themes (hero, CTA). */
+  --color-ink-950: #060606;
+  --color-ink-900: #0b0b0c;
+  --color-ink-850: #111110;
+  --color-ink-800: #181715;
+  --color-ink-700: #24221e;
+
+  /* Gold — sampled from the logo's ring and fairy. */
+  --color-brand-50: #fbf7ec;
+  --color-brand-100: #f6ecd0;
+  --color-brand-200: #eedb9f;
+  --color-brand-300: #e4c775;
+  --color-brand-400: #d8b056;
+  --color-brand-500: #c89b3c;
+  --color-brand-600: #a97f2c;
+  --color-brand-700: #876425;
+  --color-brand-800: #654b1f;
+  --color-brand-900: #463418;
+
+  --shadow-glow: 0 0 0 1px rgba(216, 176, 86, 0.25), 0 24px 60px -18px rgba(200, 155, 60, 0.55);
+
+  --animate-marquee: marquee 36s linear infinite;
+  --animate-marquee-slow: marquee 60s linear infinite;
+  --animate-float: float 7s ease-in-out infinite;
+  --animate-spin-slow: spin 60s linear infinite;
+  --animate-spin-slower: spin 90s linear infinite reverse;
+
+  --spacing-4_5: 1.125rem;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+@keyframes shine-sweep {
+  0% {
+    transform: translateX(-120%) skewX(-12deg);
+  }
+  55%,
+  100% {
+    transform: translateX(220%) skewX(-12deg);
+  }
+}
+@keyframes glow-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+/* Intro loader (components/common/Preloader.jsx): shown for 1.5s on the first view of a
+   session, then fades out; `hf-preloaded` (set in <head>) skips it on repeat views. */
+.hf-preloader {
+  animation: hf-pre-out 0.5s ease 1.5s forwards;
+}
+html.hf-preloaded .hf-preloader {
+  display: none;
+}
+@keyframes hf-pre-out {
+  to {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
+.hf-preloader-inner {
+  animation:
+    hf-pre-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both,
+    hf-pre-zoom 0.5s ease 1.5s forwards;
+}
+@keyframes hf-pre-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}
+@keyframes hf-pre-zoom {
+  to {
+    opacity: 0;
+    transform: scale(1.1);
+  }
+}
+.hf-preloader-logo {
+  animation: hf-pre-wiggle 1.4s ease-in-out both;
+}
+@keyframes hf-pre-wiggle {
+  0%,
+  25%,
+  100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(8deg);
+  }
+  75% {
+    transform: rotate(-8deg);
+  }
+}
+.hf-preloader-bar {
+  animation: hf-pre-bar 1.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes hf-pre-bar {
+  from {
+    transform: translateX(-100%);
+  }
+}
+/* While the intro loader covers the page, hold the hero entrance until it lifts */
+html:not(.hf-preloaded) {
+  --hf-intro: 1.5s;
+}
+
+/* Hero entrance + star twinkle in CSS (compositor-only: opacity/transform), so the hero
+   copy paints without waiting for JS hydration (LCP) and nothing runs on the main thread */
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.hero-rise {
+  animation: hero-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--d, 0s) + var(--hf-intro, 0s)) both;
+}
+@keyframes hero-twinkle {
+  0%,
+  100% {
+    opacity: 0.15;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.1);
+  }
+}
+.hero-twinkle {
+  animation: hero-twinkle 3.6s ease-in-out infinite both;
+}
+@keyframes hero-zoom {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.hero-zoom {
+  animation: hero-zoom 1.1s cubic-bezier(0.22, 1, 0.36, 1) calc(0.2s + var(--hf-intro, 0s)) both;
+}
+@keyframes hero-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.hero-fade {
+  animation: hero-fade 0.5s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--d, 0s) + var(--hf-intro, 0s)) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-rise,
+  .hero-twinkle,
+  .hero-zoom,
+  .hero-fade {
+    animation: none;
+  }
+}
+@keyframes gold-shimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+@layer base {
+  html,
+  body {
+    background: var(--color-page);
+    color: var(--color-fg-body);
+    -webkit-font-smoothing: antialiased;
+    max-width: 100vw;
+    width: 100%;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Smooth the flip between themes */
+  body,
+  body * {
+    transition:
+      background-color 0.35s ease,
+      border-color 0.35s ease,
+      color 0.2s ease;
+  }
+
+  ::selection {
+    background: var(--color-brand-400);
+    color: #0b0b0c;
+  }
+
+  /* Tailwind v4 resets buttons to the default arrow cursor. */
+  button:not(:disabled),
+  [role='button']:not([aria-disabled='true']) {
+    cursor: pointer;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    color: var(--color-fg);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: rgb(var(--page));
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgb(var(--hair) / 0.2);
+    border-radius: 999px;
+    border: 2px solid rgb(var(--page));
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-brand-500);
+  }
+}
+
+@layer components {
+  .container-x {
+    @apply mx-auto w-full max-w-[1280px] px-3.5 sm:px-6 lg:px-8;
+  }
+
+  .eyebrow {
+    @apply inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.22em] text-brand-700 dark:text-brand-300;
+  }
+
+  /* Tailwind v4's @apply can't compose one custom class from another, so
+     the shared button styles are repeated in each variant. */
+  .btn-primary {
+    @apply relative inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-all duration-300 will-change-transform bg-gradient-to-r from-brand-300 via-brand-400 to-brand-500 text-ink-950 shadow-[0_10px_30px_-12px_rgba(200,155,60,0.7)] hover:shadow-glow hover:brightness-110;
+  }
+  .btn-ghost {
+    @apply relative inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-all duration-300 will-change-transform border border-hair/20 text-fg hover:border-brand-400/70 hover:bg-brand-400/10;
+  }
+
+  .card {
+    @apply rounded-2xl border border-hair/10 bg-surface/70 dark:bg-tint/[0.03];
+  }
+
+  .card-glass {
+    @apply rounded-2xl border border-hair/10 bg-tint/[0.03] backdrop-blur-xl;
+  }
+
+  /* Gold hairline frame used on premium panels. */
+  .gold-frame {
+    @apply relative rounded-3xl border border-brand-400/25;
+  }
+
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+
+  /* ---- Plain 3D cards (components/ui/Card3D.jsx) --------------------
+     Clean, modern plain 3D cards with smooth light grey shadow.
+     Zero bottom lining, zero fake bottom extrusion, zero raised slab ledge.
+     Smooth depth & dynamic tilt come naturally from Card3D. */
+  .card-3d {
+    @apply border border-hair/10 bg-surface transition-[border-color,box-shadow] duration-300 hover:border-brand-400/50 dark:bg-ink-850;
+    box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.06), 0 4px 10px -2px rgba(15, 23, 42, 0.03);
+  }
+  .dark .card-3d {
+    box-shadow: 0 12px 28px -6px rgba(0, 0, 0, 0.65), 0 4px 10px -2px rgba(0, 0, 0, 0.45);
+  }
+  .card-3d-gold,
+  .dark .card-3d-gold {
+    @apply border-brand-300/60 text-ink-950;
+    background-color: var(--color-brand-400);
+    background-image: linear-gradient(145deg, var(--color-brand-200), var(--color-brand-400) 45%, var(--color-brand-600));
+    box-shadow: 0 12px 28px -6px rgba(216, 176, 86, 0.32), 0 4px 10px -2px rgba(216, 176, 86, 0.18);
+  }
+  .card-3d-dark,
+  .dark .card-3d-dark {
+    @apply border-brand-400/25 text-white hover:border-brand-300/70;
+    background-color: var(--color-ink-950);
+    box-shadow: 0 12px 28px -6px rgba(0, 0, 0, 0.7), 0 4px 10px -2px rgba(0, 0, 0, 0.5);
+  }
+
+  /* Raised icon tile on 3D cards — plain 3D with clean light grey shadow and ZERO bottom lining */
+  .icon-3d {
+    @apply inline-flex items-center justify-center transition-all duration-300 will-change-transform;
+    background-color: rgba(216, 176, 86, 0.10);
+    border: 1px solid rgba(216, 176, 86, 0.28);
+    color: var(--color-brand-700);
+    box-shadow: 0 2px 6px -1px rgba(15, 23, 42, 0.06);
+  }
+
+  .dark .icon-3d {
+    background-color: rgba(255, 248, 230, 0.05);
+    border: 1px solid rgba(216, 176, 86, 0.24);
+    color: var(--color-brand-300);
+    box-shadow: 0 3px 8px -2px rgba(0, 0, 0, 0.4);
+  }
+
+  /* When the card is hovered, the icon smoothly fills with signature metallic gold gradient without any bottom lining */
+  .group\/card3d:hover .icon-3d,
+  .group:hover .icon-3d,
+  .group\/item:hover .icon-3d,
+  .group\/tile:hover .icon-3d,
+  .icon-3d:hover {
+    background-color: transparent !important;
+    background-image: linear-gradient(145deg, var(--color-brand-200), var(--color-brand-400) 50%, var(--color-brand-600)) !important;
+    border-color: rgba(216, 176, 86, 0.65) !important;
+    color: #060606 !important;
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px -4px rgba(216, 176, 86, 0.4) !important;
+  }
+
+  .link-underline {
+    @apply relative after:absolute after:-bottom-0.5 after:left-0 after:h-px after:w-0 after:bg-current after:transition-all after:duration-300 after:content-[''] hover:after:w-full;
+  }
+
+  /* Executive 4-Variant Sequential Section Backgrounds (Ultra-Light, Whisper-Soft Luxury Tints) */
+  /* Variant 1: Pure Canvas (White / Obsidian) */
+  .bg-section-v1,
+  [data-section-variant="1"] {
+    background-color: #ffffff !important;
+    border-top: 1px solid transparent !important;
+    border-bottom: 1px solid transparent !important;
+  }
+  .dark .bg-section-v1,
+  .dark [data-section-variant="1"] {
+    background-color: #080809 !important;
+    border-top: 1px solid transparent !important;
+    border-bottom: 1px solid transparent !important;
+  }
+
+  /* Variant 2: Whisper-Soft Cool Ice Blue / Crisp Azure Tint (Ultra-Light & Low Visibility) */
+  .bg-section-v2,
+  .bg-section-alt,
+  [data-section-variant="2"] {
+    background-color: #f4f8fc !important;
+    border-top: 1px solid rgba(186, 214, 245, 0.25) !important;
+    border-bottom: 1px solid rgba(186, 214, 245, 0.25) !important;
+  }
+  .dark .bg-section-v2,
+  .dark .bg-section-alt,
+  .dark [data-section-variant="2"] {
+    background-color: #0a0e16 !important;
+    border-top: 1px solid rgba(96, 165, 250, 0.08) !important;
+    border-bottom: 1px solid rgba(96, 165, 250, 0.08) !important;
+  }
+
+  /* Variant 3: Whisper-Soft Luxury Warm Gold / Delicate Ivory Linen (Ultra-Light & Low Visibility) */
+  .bg-section-v3,
+  [data-section-variant="3"] {
+    background-color: #fcf9f1 !important;
+    border-top: 1px solid rgba(216, 176, 86, 0.18) !important;
+    border-bottom: 1px solid rgba(216, 176, 86, 0.18) !important;
+  }
+  .dark .bg-section-v3,
+  .dark [data-section-variant="3"] {
+    background-color: #110f0a !important;
+    border-top: 1px solid rgba(216, 176, 86, 0.09) !important;
+    border-bottom: 1px solid rgba(216, 176, 86, 0.09) !important;
+  }
+
+  /* Variant 4: Whisper-Soft Serene Mint Sage / Morning Dew Tint (Ultra-Light & Low Visibility) */
+  .bg-section-v4,
+  [data-section-variant="4"] {
+    background-color: #f2f9f5 !important;
+    border-top: 1px solid rgba(110, 231, 183, 0.22) !important;
+    border-bottom: 1px solid rgba(110, 231, 183, 0.22) !important;
+  }
+  .dark .bg-section-v4,
+  .dark [data-section-variant="4"] {
+    background-color: #09110d !important;
+    border-top: 1px solid rgba(52, 211, 153, 0.08) !important;
+    border-bottom: 1px solid rgba(52, 211, 153, 0.08) !important;
+  }
+}
+
+@layer utilities {
+  .text-gradient-brand {
+    @apply bg-gradient-to-r from-brand-700 via-brand-500 to-brand-700 bg-clip-text text-transparent dark:from-brand-200 dark:via-brand-400 dark:to-brand-300;
+  }
+  /* Always-on gold, for text sitting on the fixed-black hero/CTA surfaces. */
+  .text-gold {
+    background-image: linear-gradient(100deg, #f3dc97 0%, #d8b056 35%, #f6e7b8 50%, #c89b3c 70%, #e9cf82 100%);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: gold-shimmer 8s linear infinite;
+  }
+  .mask-fade-x {
+    -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  }
+  .animate-shine-sweep {
+    animation: shine-sweep 5s ease-in-out infinite;
+  }
+  .animate-glow-pulse {
+    animation: glow-pulse 4s ease-in-out infinite;
+  }
+  .noise {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Standalone Error & 404 Pages — Hide Public Header, Footer, and Floating Widgets */
+body.hide-shell-chrome #main-navbar,
+body.hide-shell-chrome #main-footer,
+body.hide-shell-chrome .scroll-progress,
+body.hide-shell-chrome .back-to-top,
+body.hide-shell-chrome [aria-label="Chat on WhatsApp"] {
+  display: none !important;
+}
+

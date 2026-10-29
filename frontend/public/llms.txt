@@ -1,0 +1,30 @@
+# HopeFairy
+
+> HopeFairy is an abroad admission advisory and career counselling consultancy for students in India and the GCC: 1-on-1 university admissions (UK, USA, Canada, Germany, Australia, Ireland, New Zealand, France), India college admissions, SOP/LOR guidance, student visa support and test preparation (IMAT, SAT, IELTS, CELPIP).
+
+## Main pages
+
+- [Home](https://myhopefairy.com/): Overview of HopeFairy's study-abroad and counselling services
+- [About Us](https://myhopefairy.com/about-us): Who we are and how we guide students
+- [Services](https://myhopefairy.com/services): All advisory services in one place
+- [Destinations](https://myhopefairy.com/destinations): Study destinations with tuition, living costs and intakes
+- [India Admissions](https://myhopefairy.com/india-admissions): Admission guidance for India's top colleges
+- [Gulf Desk](https://myhopefairy.com/gulf-desk): Dedicated desk for families in the UAE, Qatar, Saudi Arabia, Kuwait, Oman and Bahrain
+- [Test Prep](https://myhopefairy.com/test-prep): IMAT, SAT, IELTS and CELPIP preparation
+- [Contact Us](https://myhopefairy.com/contact-us): Book a free counselling session
+
+## Services
+
+- [Career Counselling](https://myhopefairy.com/service/career-counselling)
+- [University Admissions](https://myhopefairy.com/service/university-admissions)
+- [SOP & LOR Guidance](https://myhopefairy.com/service/sop-lor-guidance)
+- [Test Preparation](https://myhopefairy.com/service/test-preparation)
+- [Visa Guidance](https://myhopefairy.com/service/visa-guidance)
+- [Scholarships & Education Loans](https://myhopefairy.com/service/scholarships-education-loans)
+- [Pre-Departure Support](https://myhopefairy.com/service/pre-departure-support)
+
+## Legal & navigation
+
+- [Sitemap](https://myhopefairy.com/sitemap): Every HopeFairy page in one place
+- [Privacy Policy](https://myhopefairy.com/privacy-policy): How student data is collected, used and protected (India DPDP Act, 2023)
+- [Terms of Use](https://myhopefairy.com/terms-of-use): Terms for using the website and services, including no-guarantee of admission or visa
